@@ -7,13 +7,13 @@ DB = BookDB()
 
 def book(book_id):
     all_books = DB.titles()
-    body = ['<h1>Book Details</h1>', '<ul>']
+    body = ['<h1>Book Details</h1>', '<p>']
     for book in all_books:
         if book_id == book['id']:
             current_book = DB.title_info(book_id)
     for key, value in current_book.items():
-        body.append(f'<li>{key}: {value}</li>')
-    body.append('</ul>')
+        body.append(f'<strong>{key}</strong>:   {value}<br>')
+    body.append('</p>')
     return '\n'.join(body)
 
 
@@ -39,6 +39,7 @@ def application(environ, start_response):
     except NameError:
         status = "404 Not Found"
         body = "<h1>Not Found</h1>"
+        body += f"Book not found: {environ['PATH_INFO']}"
     except Exception:
         status = "500 Internal Server Error"
         body = "<h1>Internal Server Error</h1>"
