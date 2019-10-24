@@ -7,16 +7,24 @@ DB = BookDB()
 
 def book(book_id):
     all_books = DB.titles()
+    body = ['<h1>Book Details</h1>', '<ul>']
+    for book in all_books:
+        if book_id == book['id']:
+            current_book = DB.title_info(book_id)
+    for key, value in current_book.items():
+        body.append(f'<li>{key}: {value}</li>')
+    body.append('</ul>')
+    return '\n'.join(body)
+
+
+def books():
+    all_books = DB.titles()
     body = ['<h1>My Bookshelf</h1>', '<ul>']
     item_template = '<li><a href="/book/{id}">{title}</a></li>'
     for book in all_books:
         body.append(item_template.format(**book))
     body.append('</ul>')
     return '\n'.join(body)
-
-
-def books():
-    return "<h1>a list of books</h1>"
 
 
 def application(environ, start_response):
