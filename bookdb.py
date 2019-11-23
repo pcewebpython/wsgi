@@ -1,6 +1,7 @@
 
 class BookDB():
     def titles(self):
+        """returns list of book titles in the database"""
         titles = [
             dict(id=id, title=database[id]['title']) for id in database.keys()
         ]
