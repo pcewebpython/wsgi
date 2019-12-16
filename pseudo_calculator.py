@@ -22,22 +22,25 @@ Consider the following URL/Response body pairs as tests:
 """
 
 def resolve_path(path):
-    """
-    Should return two values: a callable and an iterable of
-    arguments, based on the path.
-    """
+    funcs = {
+        '': books,
+        'book': book,
+    }
 
-    # TODO: Provide correct values for func and args. The
-    # examples provide the correct *syntax*, but you should
-    # determine the actual values of func and args using the
-    # path.
-    func = some_func
-    args = ['25', '32']
+    path = path.strip('/').split('/')
+
+    func_name = path[0]
+    args = path[1:]
+
+    try:
+        func = funcs[func_name]
+    except KeyError:
+        raise NameError
 
     return func, args
 
 def application(environ, start_response):
-    headers = [('Content-type', 'text/html')]
+    headers = [("Content-type", "text/html")]
     try:
         path = environ.get('PATH_INFO', None)
         if path is None:
@@ -50,7 +53,8 @@ def application(environ, start_response):
         body = "<h1>Not Found</h1>"
     except Exception:
         status = "500 Internal Server Error"
-        body = "<h1> Internal Server Error</h1>"
+        body = "<h1>Internal Server Error</h1>"
+        print(traceback.format_exc())
     finally:
         headers.append(('Content-length', str(len(body))))
         start_response(status, headers)
