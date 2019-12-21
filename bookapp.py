@@ -1,23 +1,72 @@
 import re
-
+import traceback
 from bookdb import BookDB
 
 DB = BookDB()
 
 
 def book(book_id):
-    return "<h1>a book with id %s</h1>" % book_id
+    all_books = DB.titles()
+    body = ['<h1>Book Details</h1>', '<p>']
+    for book in all_books:
+        if book_id == book['id']:
+            current_book = DB.title_info(book_id)
+    for key, value in current_book.items():
+        body.append(f'<strong>{key}</strong>:   {value}<br>')
+    body.append('</p>')
+    return '\n'.join(body)
 
 
 def books():
-    return "<h1>a list of books</h1>"
+    all_books = DB.titles()
+    body = ['<h1>My Bookshelf</h1>', '<ul>']
+    item_template = '<li><a href="/book/{id}">{title}</a></li>'
+    for book in all_books:
+        body.append(item_template.format(**book))
+    body.append('</ul>')
+    return '\n'.join(body)
 
 
 def application(environ, start_response):
-    status = "200 OK"
-    headers = [('Content-type', 'text/html')]
-    start_response(status, headers)
-    return ["<h1>No Progress Yet</h1>".encode('utf8')]
+    headers = [("Content-type", "text/html")]
+    try:
+        path = environ.get('PATH_INFO', None)
+        if path is None:
+            raise NameError
+        func, args = resolve_path(path)
+        body = func(*args)
+        status = "200 OK"
+    except NameError:
+        status = "404 Not Found"
+        body = "<h1>Not Found</h1>"
+        body += f"Book not found: {environ['PATH_INFO']}"
+    except Exception:
+        status = "500 Internal Server Error"
+        body = "<h1>Internal Server Error</h1>"
+        print(traceback.format_exc())
+    finally:
+        headers.append(('Content-length', str(len(body))))
+        start_response(status, headers)
+        return [body.encode('utf8')]
+
+
+def resolve_path(path):
+    funcs = {
+        '': books,
+        'book': book,
+    }
+
+    path = path.strip('/').split('/')
+
+    func_name = path[0]
+    args = path[1:]
+
+    try:
+        func = funcs[func_name]
+    except KeyError:
+        raise NameError
+
+    return func, args
 
 
 if __name__ == '__main__':

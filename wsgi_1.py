@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import datetime
+import os
+import socket
 
 default = "No Value Set"
 
@@ -21,11 +23,11 @@ def application(environ, start_response):
 
     response_body = body.format(
         software=environ.get('SERVER_SOFTWARE', default),
-        path="aaaa",
-        month="bbbb",
-        date="cccc",
-        year="dddd",
-        client_ip="eeee"
+        path=os.path.realpath(__file__),
+        month=datetime.date.today().strftime('%B'),
+        date=datetime.date.today().strftime('%d'),
+        year=datetime.date.today().strftime('%Y'),
+        client_ip=socket.gethostbyname(socket.gethostname())
     )
     status = '200 OK'
 
