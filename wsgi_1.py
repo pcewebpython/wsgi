@@ -1,9 +1,14 @@
+""" wsg_1.py script """
+
 #!/usr/bin/env python
+#import os
+
 import datetime
+import pprint
 
-default = "No Value Set"
+DEFAULT = "No Value Set"
 
-body = """<html>
+BODY = """<html>
 <head>
 <title>Lab 3 - WSGI experiments</title>
 </head>
@@ -14,18 +19,17 @@ body = """<html>
 </body>
 </html>"""
 
-
 def application(environ, start_response):
-    import pprint
+    """ application """
     pprint.pprint(environ)
 
-    response_body = body.format(
-        software=environ.get('SERVER_SOFTWARE', default),
-        path="aaaa",
-        month="bbbb",
-        date="cccc",
-        year="dddd",
-        client_ip="eeee"
+    response_body = BODY.format(
+        software=environ.get('SERVER_SOFTWARE', DEFAULT),
+        path=environ.get('PATH_INFO', DEFAULT),
+        month=datetime.datetime.now().strftime('%B'),
+        date=datetime.datetime.now().day,
+        year=datetime.datetime.now().year,
+        client_ip=environ.get('REMOTE_ADDR', DEFAULT),
     )
     status = '200 OK'
 
@@ -33,10 +37,10 @@ def application(environ, start_response):
                         ('Content-Length', str(len(response_body)))]
     start_response(status, response_headers)
 
-    return [response_body.encode('utf8')]
-
+    return [response_body.encode('utf-8')]
 
 if __name__ == '__main__':
     from wsgiref.simple_server import make_server
-    srv = make_server('localhost', 8080, application)
-    srv.serve_forever()
+    SRV = make_server('localhost', 8080, application)
+    SRV.serve_forever()
+    
