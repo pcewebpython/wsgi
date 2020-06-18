@@ -21,11 +21,11 @@ def application(environ, start_response):
 
     response_body = body.format(
         software=environ.get('SERVER_SOFTWARE', default),
-        path="aaaa",
-        month="bbbb",
-        date="cccc",
-        year="dddd",
-        client_ip="eeee"
+        path=environ.get('PATH_INFO', default),
+        month=datetime.datetime.now().strftime('%b'),
+        date=datetime.datetime.now().day,
+        year=datetime.datetime.now().year,
+        client_ip=environ.get('REMOTE_ADDR', default)
     )
     status = '200 OK'
 
@@ -38,5 +38,5 @@ def application(environ, start_response):
 
 if __name__ == '__main__':
     from wsgiref.simple_server import make_server
-    srv = make_server('localhost', 8080, application)
+    srv = make_server('127.0.0.1', 8080, application)
     srv.serve_forever()
