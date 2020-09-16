@@ -1,0 +1,21 @@
+test_all_titles_correct (tests.BookDBTestCase) ... ok
+test_all_titles_returned (tests.BookDBTestCase) ... ok
+test_title_info_complete (tests.BookDBTestCase) ... ok
+test_title_info_correct (tests.BookDBTestCase) ... ok
+test_all_ids_have_results (tests.BookTestCase) ... ok
+test_bad_id_raises_name_error (tests.BookTestCase) ... ok
+test_id_returns_correct_results (tests.BookTestCase) ... ok
+test_all_book_ids_in_result (tests.BooksTestCase) ... ok
+test_all_book_titles_in_result (tests.BooksTestCase) ... ok
+test_bad_path_raises_name_error (tests.ResolvePathTestCase) ... ok
+test_book_path_returns_book_function (tests.ResolvePathTestCase) ... ok
+test_book_path_returns_bookid_in_args (tests.ResolvePathTestCase) ... ok
+test_root_returns_books_function (tests.ResolvePathTestCase)
+verify that the correct function is returned by the root path ... ok
+test_root_returns_no_args (tests.ResolvePathTestCase)
+verify that no args are returned for the root path ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 0.006s
+
+OK
