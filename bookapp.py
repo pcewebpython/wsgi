@@ -11,7 +11,13 @@ def book(book_id):
 
 
 def books():
-    return "<h1>a list of books</h1>"
+    all_books = DB.titles()
+    body = ['<h1>My Bookshelf</h1>', '<ul>']
+    item_template = '<li><a href="/book/{id}">{title}</a></li>'
+    for book in all_books:
+        body.append(item_template.format(**book))
+    body.append('</ul>')
+    return '\n'.join(body)
 
 
 def resolve_path(path):
