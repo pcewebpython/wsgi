@@ -1,3 +1,5 @@
+# Stella Kim
+# Practice Activity 4: CGI & WSGI
 
 class BookDB():
     def titles(self):
