@@ -1,7 +1,11 @@
 #!/usr/bin/env python
+
+# Stella Kim
+# Practice Activity 4: CGI & WSGI
+
 import datetime
 
-default = "No Value Set"
+default = 'No Value Set'
 
 body = """<html>
 <head>
@@ -21,11 +25,11 @@ def application(environ, start_response):
 
     response_body = body.format(
         software=environ.get('SERVER_SOFTWARE', default),
-        path="aaaa",
-        month="bbbb",
-        date="cccc",
-        year="dddd",
-        client_ip="eeee"
+        path=environ.get('PATH_INFO', default),
+        month=datetime.datetime.now().strftime('%B'),
+        date=datetime.datetime.now().day,
+        year=datetime.datetime.now().year,
+        client_ip=environ.get('REMOTE_ADDR', default)
     )
     status = '200 OK'
 
